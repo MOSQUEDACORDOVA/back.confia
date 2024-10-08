@@ -14,13 +14,5 @@ class AdminUserSeeder extends Seeder
      */
     public function run(): void
     {
-        DB::table('users')->insert([
-            'name' => 'Admin User',
-            'email' => 'isaacperuperu@gmail.com',
-            'password' => Hash::make('123456789'), // Asegúrate de cambiar esta contraseña
-            'type' => 1, // 1 = Admin
-            'created_at' => now(),
-            'updated_at' => now(),
-        ]);
     }
 }

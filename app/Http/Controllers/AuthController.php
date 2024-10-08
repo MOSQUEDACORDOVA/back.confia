@@ -61,25 +61,30 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-    {
-        $validator = Validator::make($request->all(), [
-            'email' => 'required|string|email',
-            'password' => 'required|string',
-        ]);
+{
+    // Valida los campos 'phone' y 'password'
+    $validator = Validator::make($request->all(), [
+        'phone' => 'required|string',
+        'password' => 'required|string',
+    ]);
 
-        if ($validator->fails()) {
-            return response()->json(['errors' => $validator->errors()], 422);
-        }
-
-        if (!auth()->attempt($request->only('email', 'password'))) {
-            throw ValidationException::withMessages([
-                // 'email' => ['Credenciales incorrectas'],
-                'email' => ['Invalid credentials, try again.'],
-            ]);
-        }
-
-        $token = auth()->user()->createToken('auth_token')->plainTextToken;
-
-        return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'user' => auth()->user()]);
+    // Si la validación falla, retorna un error
+    if ($validator->fails()) {
+        return response()->json(['errors' => $validator->errors()], 422);
     }
+
+    // Intenta autenticar usando 'phone' y 'password'
+    if (!auth()->attempt(['phone' => $request->phone, 'password' => $request->password])) {
+        throw ValidationException::withMessages([
+            'phone' => ['Invalid credentials, try again.'],
+        ]);
+    }
+
+    // Si la autenticación es exitosa, genera el token
+    $token = auth()->user()->createToken('auth_token')->plainTextToken;
+
+    // Retorna el token y los detalles del usuario
+    return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'user' => auth()->user()]);
+}
+
 }

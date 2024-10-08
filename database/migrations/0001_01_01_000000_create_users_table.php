@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
+            $table->string('full_name');
+            $table->string('phone')->unique();
+            $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
             $table->unsignedTinyInteger('type')->default(2);
             $table->rememberToken();
@@ -23,7 +23,7 @@ return new class extends Migration
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
-            $table->string('email')->primary();
+            $table->string('phone')->primary();
             $table->string('token');
             $table->timestamp('created_at')->nullable();
         });
@@ -39,8 +39,8 @@ return new class extends Migration
         
         // Crear el usuario administrador automáticamente
         DB::table('users')->insert([
-            'name' => 'Admin',
-            'email' => 'admin@example.com',
+            'full_name' => 'Isaac Alberto Mosqueda Córdova',
+            'phone' => '945692831',
             'password' => Hash::make('1234'), // Asegúrate de cambiar la contraseña por seguridad
             'type' => 1,
             'created_at' => now(),
