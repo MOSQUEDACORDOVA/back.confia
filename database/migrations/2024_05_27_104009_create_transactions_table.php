@@ -12,13 +12,16 @@ return new class extends Migration
     public function up(): void
     {
 
-        Schema::create('job_offers', function (Blueprint $table) {
+        Schema::create('transactions', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
-            $table->text('description');
-            $table->string('whatsapp')->nullable();
-            $table->string('mail')->nullable();
+            $table->integer('id_user');
+            $table->string('operation');
+            //por defecto el estado (2) en revision
             $table->unsignedTinyInteger('status')->default(2);
+            //por defecto la operacion es un deposito (1)
+            //pero puede ser una transferencia de otra persona
+            //Puede ser un retiro
+            $table->unsignedTinyInteger('type')->default(1); 
             $table->timestamps();
         });
     }
@@ -28,6 +31,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('job_offers');
+        Schema::dropIfExists('transactions');
     }
 };

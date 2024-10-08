@@ -9,6 +9,8 @@ use App\Http\Controllers\DeliveryController;
 use App\Http\Middleware\CheckUserType;
 
 Route::post('/login', [AuthController::class, 'login']);
+//Crear usuario
+Route::post('/register', [AuthController::class, 'register_width_operation_number']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
@@ -26,12 +28,9 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Crear y editar usuario
     Route::middleware(CheckUserType::class)->group(function () {
-        //Crear usuario
-        Route::post('/register', [AuthController::class, 'register']);
+        
         //Esitar Usuario
         Route::put('/users/{id}', [UserController::class, 'update']);
-        //Crear usuario
-        Route::post('/register', [AuthController::class, 'register']);
         //Ver usuarios
         Route::get('/users', [UserController::class, 'index']);
         //Eliminar usuario

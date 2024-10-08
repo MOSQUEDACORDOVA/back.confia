@@ -5,14 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class JobOffers extends Model
+class Transactions extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'title',
-        'description',
-        'whatsapp',
-        'mail',
+        'id_user',
+        'operation',
         'status',
+        'type',
     ];
 }

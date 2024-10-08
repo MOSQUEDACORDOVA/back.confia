@@ -60,6 +60,48 @@ class AuthController extends Controller
         return response()->json(['message' => 'Usuario registrado con éxito y correo enviado'], 201);
     }
 
+    public function register_width_phone(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:4|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::create([
+            'full_name' => $request->full_name,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+    }
+
+    public function register_width_operation_number(Request $request)
+    {
+        $validator = Validator::make($request->all(), [
+            'full_name' => 'required|string|max:255',
+            'phone' => 'required|string|max:255|unique:users',
+            'password' => 'required|string|min:4|confirmed',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        $user = User::create([
+            'full_name' => $request->full_name,
+            'phone' => $request->phone,
+            'password' => Hash::make($request->password),
+        ]);
+
+        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+    }
+
     public function login(Request $request)
     {
         // Valida los campos 'phone' y 'password'
