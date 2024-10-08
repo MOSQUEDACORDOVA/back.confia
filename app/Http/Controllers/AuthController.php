@@ -61,30 +61,31 @@ class AuthController extends Controller
     }
 
     public function login(Request $request)
-{
-    // Valida los campos 'phone' y 'password'
-    $validator = Validator::make($request->all(), [
-        'phone' => 'required|string',
-        'password' => 'required|string',
-    ]);
-
-    // Si la validación falla, retorna un error
-    if ($validator->fails()) {
-        return response()->json(['errors' => $validator->errors()], 422);
-    }
-
-    // Intenta autenticar usando 'phone' y 'password'
-    if (!auth()->attempt(['phone' => $request->phone, 'password' => $request->password])) {
-        throw ValidationException::withMessages([
-            'phone' => ['Invalid credentials, try again.'],
+    {
+        // Valida los campos 'phone' y 'password'
+        $validator = Validator::make($request->all(), [
+            'phone' => 'required|string',
+            'password' => 'required|string',
         ]);
+
+        // Si la validación falla, retorna un error
+        if ($validator->fails()) {
+            return response()->json(['errors' => $validator->errors()], 422);
+        }
+
+        // Intenta autenticar usando 'phone' y 'password'
+        if (!auth()->attempt(['phone' => $request->phone, 'password' => $request->password])) {
+            return response()->json([
+                'message' => 'Datos inválidos'
+            ], 401);  // Código de estado 401 para credenciales inválidas
+            
+        }
+
+        // Si la autenticación es exitosa, genera el token
+        $token = auth()->user()->createToken('auth_token')->plainTextToken;
+
+        // Retorna el token y los detalles del usuario
+        return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'user' => auth()->user()]);
     }
-
-    // Si la autenticación es exitosa, genera el token
-    $token = auth()->user()->createToken('auth_token')->plainTextToken;
-
-    // Retorna el token y los detalles del usuario
-    return response()->json(['access_token' => $token, 'token_type' => 'Bearer', 'user' => auth()->user()]);
-}
 
 }
