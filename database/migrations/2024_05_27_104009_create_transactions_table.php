@@ -16,6 +16,8 @@ return new class extends Migration
             $table->id();
             $table->integer('id_user');
             $table->string('operation');
+            //el monto lo validamos o calculamos nosotros manualmente por ahora
+            $table->integer('monto')->nullable();
             //por defecto el estado (2) en revision
             $table->unsignedTinyInteger('status')->default(2);
             //por defecto la operacion es un deposito (1)

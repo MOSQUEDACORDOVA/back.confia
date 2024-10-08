@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Models\Transaction;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\ValidationException;
@@ -87,6 +88,7 @@ class AuthController extends Controller
             'full_name' => 'required|string|max:255',
             'phone' => 'required|string|max:255|unique:users',
             'password' => 'required|string|min:4|confirmed',
+            'operation' => 'required|string|max:255', // Validar el número de operación
         ]);
 
         if ($validator->fails()) {
@@ -99,7 +101,13 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        return response()->json(['message' => 'Usuario registrado con éxito'], 201);
+        // Registrar la transacción con el número de operación
+        $transaction = Transaction::create([
+            'id_user' => $user->id,         // Asignar el ID del usuario recién creado
+            'operation' => $request->operation, // El número de operación ingresado
+        ]);
+
+        return response()->json(['message' => 'Usuario y operación registrados con éxito'], 201);
     }
 
     public function login(Request $request)
