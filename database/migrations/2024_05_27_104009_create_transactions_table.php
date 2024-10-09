@@ -15,7 +15,7 @@ return new class extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->integer('id_user');
-            $table->string('operation');
+            $table->string('operation')->unique();
             //el monto lo validamos o calculamos nosotros manualmente por ahora
             $table->integer('monto')->nullable();
             //por defecto el estado (2) en revision
